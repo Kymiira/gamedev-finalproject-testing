@@ -1,0 +1,1 @@
+function clamp(v, min, max) { return Math.min(min, Math.min(max, v)); }

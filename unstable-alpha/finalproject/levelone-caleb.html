@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movement + Camera Test</title>
+  <link rel="stylesheet" href="./css/" />
+</head>
+
+<body>
+  <div id="viewport">
+    <div id="world">
+      <div id="player"></div>
+      <div class="mark" style="left: 50px; top: 50px;"></div>
+      <div class="mark" style="left: 2800px; top: 50px;"></div>
+      <div class="mark" style="left: 50px; top: 2800px;"></div>
+      <div class="mark" style="left: 2800px; top: 2800px;"></div>
+    </div>
+
+    <div id="hud">
+      <span>WASD to move</span><br>
+      <span id="mouseX">mX: 100</span>
+      <span id="mouseY">mY: -500</span>
+    </div>
+  </div>
+  
+  
+</body>
+<!--
+    when doing scripts, order through prerequisites;
+    if loop.js acts as the main file, but uses variables required in util.js and that requires an array in bullet.js, order like so:
+        bullet.js
+        util.js
+        loop.js
+-->
+<script type="module" src="./js/"></script>
+</html>
