@@ -71,5 +71,5 @@ export function spawnHostile() {
     const x = getRandomMath(3000)
     const y = getRandomMath(3000)
 
-    console.log('x' + 'y')
+    console.log(`${x}, ${y}`)
 }
