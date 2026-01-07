@@ -30,7 +30,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   z-index: 5;
 }
 
-.hostile_1 {
+.hostile {
   position: absolute;
   width: 32px;
   height: 32px;

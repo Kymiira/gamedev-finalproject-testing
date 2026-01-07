@@ -1,3 +1,4 @@
+// main.js
 import { normalize, clamp } from './utils.js';
 import * as Engine from './engine.js';
 import { keys, hasMouse, myView, mxView } from './input.js';
@@ -42,7 +43,7 @@ function loop(ts) {
     }
 
     // 4. Spawning
-    Engine.spawnHostile();
+    Engine.updateHostiles(dt);
     
     // 5. Combat
     Engine.tickFireCd(dt);

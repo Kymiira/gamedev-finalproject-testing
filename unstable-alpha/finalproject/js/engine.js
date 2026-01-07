@@ -1,3 +1,4 @@
+// engine.js
 import { clamp } from './utils.js';
 import { getRandomMath } from './utils.js';
 
@@ -17,6 +18,8 @@ const bullet_ttl = 1.2;
 export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280 };
 export const bullets = [];
 export const hostiles = [];
+let spawnTimer = 0;
+const SPAWN_RATE = 2;
 export let camX = 0;
 export let camY = 0;
 export function setCamera(x, y) { camX = x; camY = y; }
@@ -67,9 +70,24 @@ export function tickFireCd(dt) { fireCd = Math.max(0, fireCd - dt); }
 export function resetFireCd() { fireCd = fire_cooldown; }
 
 // Logic: Hostiles
-export function spawnHostile() {
-    const x = getRandomMath(3000)
-    const y = getRandomMath(3000)
+export function updateHostiles(dt) {
+    spawnTimer += dt;
 
-    console.log(`${x}, ${y}`)
+    if (spawnTimer >= SPAWN_RATE) {
+        spawnHostile();
+        spawnTimer = 0;
+    }
+    // add move logic here
+}
+export function spawnHostile() {
+    const x = getRandomMath(WORLD_W);
+    const y = getRandomMath(WORLD_H);
+
+    const el = document.createElement("div");
+    el.className = "hostile";
+
+    world.appendChild(el);
+
+    hostiles.push({x, y, el });
+    console.log(`hostile @ ${x}, ${y}`)
 }
