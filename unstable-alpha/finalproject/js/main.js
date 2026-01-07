@@ -3,7 +3,10 @@ import * as Engine from './engine.js';
 import { keys, hasMouse, myView, mxView } from './input.js';
 
 let last = 0;
-
+let hudPX = document.getElementById('hudPlayerX')
+let hudPY = document.getElementById('hudPlayerY')
+let hudMX = document.getElementById('hudMouseX')
+let hudMY = document.getElementById('hudMouseY') 
 function loop(ts) {
     const dt = Math.min(0.033, (ts - last) / 1000 || 0);
     last = ts;
@@ -41,6 +44,12 @@ function loop(ts) {
     // 4. Combat
     Engine.tickFireCd(dt);
     Engine.updateBullets(dt);
+
+    // 5. Hud
+    hudPX.innerText = Engine.player.x
+    hudPY.innerText = Engine.player.y
+    hudMX.innerText = mxView
+    hudMY.innerText = myView
 
     requestAnimationFrame(loop);
 }
