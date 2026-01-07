@@ -1,47 +1,49 @@
-import "variables.js";
-import "loop.js";
-import "shooting.js";
-import "player.js";
-requestAnimationFrame(loop);
-function updateBullets(dt) {
-    for (let i = bullets.length - 1; i >= 0; i--) {
-        const b = bullets[i];
+import { normalize, clamp } from './utils.js';
+import * as Engine from './engine.js';
+import { keys, hasMouse } from './input.js';
 
-        b.x += b.vx * dt;
-        b.y += b.vy * dt;
-        b.life -= dt;
+let last = 0;
 
-        const outOfBounds = (b.x < 0 || b.y < 0 || b.x > WORLD_W || b.y > WORLD_H);
+function loop(ts) {
+    const dt = Math.min(0.033, (ts - last) / 1000 || 0);
+    last = ts;
 
-        if (b.life <= 0 || outOfBounds) {
-            b.el.remove();
-            bullets.splice(i, 1);
-            continue;
-        }
+    // 1. Movement
+    const ax = (keys.has("KeyD") ? 1 : 0) - (keys.has("KeyA") ? 1 : 0);
+    const ay = (keys.has("KeyS") ? 1 : 0) - (keys.has("KeyW") ? 1 : 0);
+    const n = normalize(ax, ay);
 
-        b.el.style.left = (b.x - b.w / 2) + "px";
-        b.el.style.top = (b.y - b.h / 2) + "px";
+    Engine.player.x = clamp(Engine.player.x + n.x * Engine.player.speed * dt, 0, Engine.WORLD_W - Engine.player.w);
+    Engine.player.y = clamp(Engine.player.y + n.y * Engine.player.speed * dt, 0, Engine.WORLD_H - Engine.player.h);
+
+    // 2. Camera
+    const vw = Engine.viewport.clientWidth;
+    const vh = Engine.viewport.clientHeight;
+    const camX = clamp((Engine.player.x + Engine.player.w / 2) - vw / 2, 0, Engine.WORLD_W - vw);
+    const camY = clamp((Engine.player.y + Engine.player.h / 2) - vh / 2, 0, Engine.WORLD_H - vh);
+
+    // 3. Rendering
+    Engine.world.style.transform = `translate(${-camX}px, ${-camY}px)`;
+    Engine.playerEl.style.left = `${Engine.player.x}px`;
+    Engine.playerEl.style.top = `${Engine.player.y}px`;
+    
+    if (hasMouse) {
+        Engine.playerEl.style.transform = `rotate(${Engine.faceRad}rad)`;
     }
+
+    // 4. Combat
+    Engine.tickFireCd(dt);
+    Engine.updateBullets(dt);
+
+    requestAnimationFrame(loop);
 }
 
-viewport.addEventListener("pointerdown", (e) => {
-    if (e.button !== 0) return;
-
-    const r = viewport.getBoundingClientRect();
-    mxView = e.clientX - r.left;
-    myView = e.clientY - r.top;
-    hasMouse = true;
-
-    if (fireCd <= 0) {
-        spawnBullet();
-        fireCd = fire_cooldown;
+// Shooting Listener
+Engine.viewport.addEventListener("pointerdown", (e) => {
+    if (e.button === 0 && Engine.fireCd <= 0) {
+        Engine.spawnBullet();
+        Engine.resetFireCd();
     }
 });
 
-function normalize(x, y) {
-    const m = Math.hypot(x, y);
-    if (m === 0) return { x: 0, y: 0 };
-    return { x: x / n, y: y / m};
-}
-
-function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+requestAnimationFrame(loop);

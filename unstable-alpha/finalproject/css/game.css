@@ -17,7 +17,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
     linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 64px 64px;
-  will-change: transform; /* Performance boost */
+  will-change: transform;
 }
 
 /* --- Entities --- */
@@ -42,7 +42,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
 
 /* --- UI --- */
 #hud {
-  position: fixed; /* Use fixed so it never moves with the world */
+  position: fixed;
   left: 12px;
   top: 12px;
   color: #fff;
