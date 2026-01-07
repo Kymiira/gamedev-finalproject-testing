@@ -80,12 +80,23 @@ export function updateHostiles(dt) {
     // add move logic here
 }
 export function spawnHostile() {
-    const x = getRandomMath(WORLD_W);
-    const y = getRandomMath(WORLD_H);
+    const x = getRandomMath(WORLD_W) - 32;
+    const y = getRandomMath(WORLD_H - 32);
 
     const el = document.createElement("div");
-    el.className = "hostile";
+    el.classList.add("hostile")
+    el.style.position = "absolute";
+    el.style.width = "32px";
+    el.style.height = "32px";
+    el.style.background = "#e90909";
+    el.style.borderRadius = "6px";
+    el.style.zIndex = "5";
 
+
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+
+    
     world.appendChild(el);
 
     hostiles.push({x, y, el });
