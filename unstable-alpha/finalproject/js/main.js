@@ -46,10 +46,10 @@ function loop(ts) {
     Engine.updateBullets(dt);
 
     // 5. Hud
-    hudPX.innerText = Engine.player.x
-    hudPY.innerText = Engine.player.y
-    hudMX.innerText = mxView
-    hudMY.innerText = myView
+    hudPX.innerText = "Player X:" + Engine.player.x
+    hudPY.innerText = "Player Y:" + Engine.player.y
+    hudMX.innerText = "Mouse X:" + mxView
+    hudMY.innerText = "Mouse Y:" + myView
 
     requestAnimationFrame(loop);
 }
