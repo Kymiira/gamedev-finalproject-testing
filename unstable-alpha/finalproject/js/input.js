@@ -1,4 +1,5 @@
-import { viewport, setFaceRad } from './engine.js';
+import { viewport, setFaceRad, player, camX, camY } from './engine.js';
+
 
 export const keys = new Set();
 export let mxView = 0;
@@ -14,8 +15,8 @@ viewport.addEventListener("pointermove", (e) => {
   myView = e.clientY - r.top;
   hasMouse = true;
 
-  const px = (Engine.player.x - Engine.camX) + (Engine.player.w / 2);
-  const py = (Engine.player.y - Engine.camY) + (Engine.player.h / 2);
+  const px = (player.x - camX) + (player.w / 2);
+  const py = (player.y - camY) + (player.h / 2);
 
   setFaceRad(Math.atan2(myView - py, mxView - px));
 });
