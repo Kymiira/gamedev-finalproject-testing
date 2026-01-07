@@ -1,6 +1,6 @@
 import { normalize, clamp } from './utils.js';
 import * as Engine from './engine.js';
-import { keys, hasMouse } from './input.js';
+import { keys, hasMouse, myView, mxView } from './input.js';
 
 let last = 0;
 
