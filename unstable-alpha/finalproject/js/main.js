@@ -48,6 +48,7 @@ function loop(ts) {
     // 5. Combat
     Engine.tickFireCd(dt);
     Engine.updateBullets(dt);
+    Engine.checkCollisions(dt);
 
     // 6. Hud
     hudPX.innerText = "Player X:" + Engine.player.x

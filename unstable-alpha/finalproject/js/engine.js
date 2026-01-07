@@ -16,7 +16,7 @@ const bullet_speed = 900;
 const bullet_ttl = 1.2;
 
 // State
-export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280 };
+export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280, health: 10 };
 export const bullets = [];
 export const hostiles = [];
 let spawnTimer = 0;
@@ -120,3 +120,64 @@ export function spawnHostile() {
     hostiles.push({x, y, el, health });
     console.log(`hostile @ ${x}, ${y}`)
 }
+
+// Logic: Collisions
+// engine.js state variables
+let playerInvincibility = 0; 
+
+export function checkCollisions(dt) {
+    if (playerInvincibility > 0) playerInvincibility -= dt;
+
+    for (let j = hostiles.length - 1; j >= 0; j--) {
+        const h = hostiles[j];
+
+        // --- SECTION A: PLAYER VS HOSTILE ---
+        if (playerInvincibility <= 0) {
+            if (
+                player.x < h.x + 32 &&
+                player.x + player.w > h.x &&
+                player.y < h.y + 32 &&
+                player.y + player.h > h.y
+            ) {
+                player.health -= 10;
+                playerInvincibility = 0.5;
+                
+                playerEl.style.filter = "brightness(3)";
+                setTimeout(() => playerEl.style.filter = "none", 100);
+                
+                if (player.health <= 0) {
+                    alert("Game Over!");
+                    window.location.reload();
+                }
+            }
+        }
+
+        // --- SECTION B: BULLETS VS THIS HOSTILE ---
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            const b = bullets[i];
+
+            if (
+                b.x < h.x + 32 &&
+                b.x + b.w > h.x &&
+                b.y < h.y + 32 &&
+                b.y + b.h > h.y
+            ) {
+                h.health -= 1;
+                
+                b.el.remove();
+                bullets.splice(i, 1);
+
+                if (h.health <= 0) {
+                    h.el.remove();
+                    hostiles.splice(j, 1);
+                    updateScore(100);
+                }
+                
+                break; 
+            }
+        }
+    }
+}
+
+// Score
+export
