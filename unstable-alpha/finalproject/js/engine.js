@@ -15,9 +15,14 @@ const bullet_ttl = 1.2;
 // State
 export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280 };
 export const bullets = [];
+export let camX = 0;
+export let camY = 0;
+export function setCamera(x, y) { camX = x; camY = y; }
 export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
+
+
 
 // Logic: Bullets
 export function spawnBullet() {

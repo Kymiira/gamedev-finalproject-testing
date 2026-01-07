@@ -9,13 +9,13 @@ window.addEventListener("keydown", (e) => keys.add(e.code));
 window.addEventListener("keyup", (e) => keys.delete(e.code));
 
 viewport.addEventListener("pointermove", (e) => {
-    const r = viewport.getBoundingClientRect();
-    mxView = e.clientX - r.left;
-    myView = e.clientY - r.top;
-    hasMouse = true;
-    
-    // Calculate aiming angle
-    const vx = viewport.clientWidth / 2;
-    const vy = viewport.clientHeight / 2;
-    setFaceRad(Math.atan2(myView - vy, mxView - vx));
+  const r = viewport.getBoundingClientRect();
+  mxView = e.clientX - r.left;
+  myView = e.clientY - r.top;
+  hasMouse = true;
+
+  const px = (Engine.player.x - Engine.camX) + (Engine.player.w / 2);
+  const py = (Engine.player.y - Engine.camY) + (Engine.player.h / 2);
+
+  setFaceRad(Math.atan2(myView - py, mxView - px));
 });

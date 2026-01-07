@@ -21,6 +21,13 @@ function loop(ts) {
     const vh = Engine.viewport.clientHeight;
     const camX = clamp((Engine.player.x + Engine.player.w / 2) - vw / 2, 0, Engine.WORLD_W - vw);
     const camY = clamp((Engine.player.y + Engine.player.h / 2) - vh / 2, 0, Engine.WORLD_H - vh);
+    Engine.setCamera(camX, camY);
+    if (hasMouse) {
+        const px = (Engine.player.x - camX) + (Engine.player.w / 2);
+        const py = (Engine.player.y - camY) + (Engine.player.h / 2);
+        Engine.setFaceRad(Math.atan2(myView - py, mxView - px));
+    }
+
 
     // 3. Rendering
     Engine.world.style.transform = `translate(${-camX}px, ${-camY}px)`;
