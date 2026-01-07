@@ -78,7 +78,7 @@ export function updateHostiles(dt) {
         spawnHostile();
         spawnTimer = 0;
     }
-    // add move logic here
+
     for (let i = 0; i < hostiles.length; i++) {
         const h = hostiles[i];
 
