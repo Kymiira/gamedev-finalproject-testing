@@ -1,6 +1,7 @@
 // engine.js
 import { clamp } from './utils.js';
 import { getRandomMath } from './utils.js';
+import { normalize } from './utils.js';
 
 // DOM Elements
 export const viewport = document.getElementById("viewport");
