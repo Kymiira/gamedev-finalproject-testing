@@ -1,4 +1,5 @@
 import { clamp } from './utils.js';
+import { getRandomMath } from './utils.js';
 
 // DOM Elements
 export const viewport = document.getElementById("viewport");
@@ -15,14 +16,13 @@ const bullet_ttl = 1.2;
 // State
 export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280 };
 export const bullets = [];
+export const hostiles = [];
 export let camX = 0;
 export let camY = 0;
 export function setCamera(x, y) { camX = x; camY = y; }
 export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
-
-
 
 // Logic: Bullets
 export function spawnBullet() {
@@ -61,6 +61,15 @@ export function updateBullets(dt) {
     }
 }
 
+
 export function setFaceRad(val) { faceRad = val; }
 export function tickFireCd(dt) { fireCd = Math.max(0, fireCd - dt); }
 export function resetFireCd() { fireCd = fire_cooldown; }
+
+// Logic: Hostiles
+export function spawnHostile() {
+    const x = getRandomMath(3000)
+    const y = getRandomMath(3000)
+
+    console.log('x' + 'y')
+}

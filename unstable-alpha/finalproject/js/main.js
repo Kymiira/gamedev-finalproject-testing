@@ -41,11 +41,14 @@ function loop(ts) {
         Engine.playerEl.style.transform = `rotate(${Engine.faceRad}rad)`;
     }
 
-    // 4. Combat
+    // 4. Spawning
+    Engine.spawnHostile();
+    
+    // 5. Combat
     Engine.tickFireCd(dt);
     Engine.updateBullets(dt);
 
-    // 5. Hud
+    // 6. Hud
     hudPX.innerText = "Player X:" + Engine.player.x
     hudPY.innerText = "Player Y:" + Engine.player.y
     hudMX.innerText = "Mouse X:" + mxView

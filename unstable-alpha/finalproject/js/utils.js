@@ -8,3 +8,7 @@ export function normalize(x, y) {
 export function clamp(v, min, max) { 
     return Math.max(min, Math.min(max, v)); 
 }
+
+export function getRandomMath(max) {
+    return Math.floor(Math.random() * max);
+}
