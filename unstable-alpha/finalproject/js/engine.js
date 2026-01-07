@@ -78,10 +78,27 @@ export function updateHostiles(dt) {
         spawnTimer = 0;
     }
     // add move logic here
+    for (let i = 0; i < hostiles.length; i++) {
+        const h = hostiles[i];
+
+        const dx = player.x - h.x;
+        const dy = player.y - h.y;
+
+        const dir = normalize(dx, dy);
+
+        const enemySpeed = 150
+        h.x += dir.x * enemySpeed * dt;
+        h.y += dir.y * enemySpeed * dt;
+
+        h.el.style.left = `${h.x}px`;
+        h.el.style.top = `${h.y}px`;
+    }
 }
+
 export function spawnHostile() {
-    const x = getRandomMath(WORLD_W) - 32;
+    const x = getRandomMath(WORLD_W - 32);
     const y = getRandomMath(WORLD_H - 32);
+    let health = 5
 
     const el = document.createElement("div");
     el.classList.add("hostile")
@@ -96,9 +113,9 @@ export function spawnHostile() {
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
 
-    
+
     world.appendChild(el);
 
-    hostiles.push({x, y, el });
+    hostiles.push({x, y, el, health });
     console.log(`hostile @ ${x}, ${y}`)
 }
