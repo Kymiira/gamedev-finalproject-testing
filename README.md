@@ -1,2 +1,2 @@
 # gamedev-finalproject-testing
-testing repo for my gamedev final project
+[version index](https://kymiira.github.io/gamedev-finalproject-testing/)
