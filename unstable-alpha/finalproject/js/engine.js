@@ -27,6 +27,22 @@ export function setCamera(x, y) { camX = x; camY = y; }
 export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
+const healthBar  = document.getElementById('healthBar');
+const MAX_HEALTH = 100;
+
+// Healthbar
+export function updatePlayerHealth(amount) {
+    player.health = Math.max(0, player.health + amount);
+    const healthPercentage = (player.health / MAX_HEALTH) * 100;
+    if (healthBar) {
+        healthBar.style.width = `${healthPercentage}%`;
+        if (healthPercentage < 30) {
+            healthBar.style.background = "#ff0000";
+        } else if (healthPercentage < 60) {
+            healthBar.style.background = "#ffff00";
+        }
+    }
+}
 
 // Logic: Bullets
 export function spawnBullet() {

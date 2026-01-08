@@ -51,10 +51,10 @@ function loop(ts) {
     Engine.checkCollisions(dt);
 
     // 6. Hud
-    hudPX.innerText = "Player X:" + Engine.player.x
-    hudPY.innerText = "Player Y:" + Engine.player.y
-    hudMX.innerText = "Mouse X:" + mxView
-    hudMY.innerText = "Mouse Y:" + myView
+    hudPX.innerText = `PLAYER X: ${Math.floor(Engine.player.x)}`;
+    hudPY.innerText = `PLAYER Y: ${Math.floor(Engine.player.y)}`;
+    hudMX.innerText = `MOUSE X: ${Math.floor(mxView)}`;
+    hudMY.innerText = `MOUSE Y: ${Math.floor(myView)}`;
 
     requestAnimationFrame(loop);
 }
