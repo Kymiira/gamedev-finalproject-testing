@@ -7,28 +7,32 @@ import { normalize } from './utils.js';
 export const viewport = document.getElementById("viewport");
 export const world = document.getElementById("world");
 export const playerEl = document.getElementById("player");
-const bulletTemplate = document.getElementById("bullet");
+export const bulletTemplate = document.getElementById("bullet");
+export const statusMessage = document.getElementById("statusMessage");
+export const teleporter document.getElementById('teleporter');
 
 // Game Constants
 export const WORLD_W = 3000;
 export const WORLD_H = 3000;
-const bullet_speed = 900;
-const bullet_ttl = 1.2;
+export const bullet_speed = 900;
+export const bullet_ttl = 1.2;
 
 // State
 export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280, health: 100 };
 export const bullets = [];
 export const hostiles = [];
-let spawnTimer = 0;
-const SPAWN_RATE = 2;
+export let spawnTimer = 0;
+export const SPAWN_RATE = 2;
 export let camX = 0;
 export let camY = 0;
 export function setCamera(x, y) { camX = x; camY = y; }
 export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
-const healthBar  = document.getElementById('healthBar');
-const MAX_HEALTH = 100;
+export const healthBar  = document.getElementById('healthBar');
+export const MAX_HEALTH = 100;
+export const hostileSpawning = true;
+export const teleporter = { x: 1500, y: 1500, w: 32, h: 32, active: false };
 
 // Healthbar
 export function updatePlayerHealth(amount) {
@@ -94,7 +98,7 @@ export function resetFireCd() { fireCd = fire_cooldown; }
 export function updateHostiles(dt) {
   spawnTimer += dt;
 
-  while (spawnTimer >= SPAWN_RATE) {
+  while (spawnTimer >= SPAWN_RATE && hostileSpawning === true) {
     spawnHostile();
     spawnTimer -= SPAWN_RATE;
   }
@@ -136,36 +140,34 @@ export function spawnHostile() {
 }
 
 // Logic: Collisions
-let playerInvincibility = 0; 
+export let playerInvincibility = 0; 
 
 export function checkCollisions(dt) {
     if (playerInvincibility > 0) playerInvincibility -= dt;
 
     for (let j = hostiles.length - 1; j >= 0; j--) {
         const h = hostiles[j];
-
 // --- SECTION A: PLAYER VS HOSTILE ---
-if (playerInvincibility <= 0) {
-    if (
-        player.x < h.x + 32 &&
-        player.x + player.w > h.x &&
-        player.y < h.y + 32 &&
-        player.y + player.h > h.y
-    ) {
-        playerInvincibility = 0.5; 
-        
-        updatePlayerHealth(-10); 
-        
-        playerEl.style.filter = "brightness(3)";
-        setTimeout(() => playerEl.style.filter = "none", 100);
-        
-        if (player.health <= 0) {
-            alert("Game Over!");
-            window.location.reload();
+        if (playerInvincibility <= 0) {
+            if (
+                player.x < h.x + 32 &&
+                player.x + player.w > h.x &&
+                player.y < h.y + 32 &&
+                player.y + player.h > h.y
+            ) {
+                playerInvincibility = 0.5; 
+                
+                updatePlayerHealth(-10); 
+                
+                playerEl.style.filter = "brightness(3)";
+                setTimeout(() => playerEl.style.filter = "none", 100);
+                
+                if (player.health <= 0) {
+                    alert("Game Over!");
+                    window.location.reload();
+                }
+            }
         }
-    }
-}
-
         // --- SECTION B: BULLETS VS THIS HOSTILE ---
         for (let i = bullets.length - 1; i >= 0; i--) {
             const b = bullets[i];
@@ -193,17 +195,35 @@ if (playerInvincibility <= 0) {
                 break; 
             }
         }
+
+        if (
+            player.x < teleporter. + 32 &&
+            player.x + player.w > teleporter. &&
+            player.y < teleporter. + 32 &&
+            player.y + player.h > teleporter.
+        ) {
+            location.href('https://developer.mozilla.org/en-US/docs/Web/API/Location');
+        }
     }
 }
 
 // Score
-export let score = 0;
-const hudScore = document.getElementById('hudScore');
+export export let score = 0;
+export const hudScore = document.getElementById('hudScore');
 
 export function updateScore(amount) {
-    score += amount;
+    if (score < 10) {
+        score += amount;
 
-    if (hudScore) {
-        hudScore.innerText = `Score: ${score}`;
+        if (hudScore) {
+            hudScore.innerText = `Score: ${score}`;
+        }  
+    } else {
+        hostileSpawning = false;
+        teleporter.active = true;
+        teleporterEl.style.left = teleporter.x + 'px';
+        teleporterEl.style.top = teleporter.y + 'px';
+        statusMessage.innerText = 'Get to the teleporter at the center of the map!'
     }
 }
+

@@ -56,6 +56,18 @@ function loop(ts) {
     hudMX.innerText = `MOUSE X: ${Math.floor(mxView)}`;
     hudMY.innerText = `MOUSE Y: ${Math.floor(myView)}`;
 
+    // 7. LevelTP
+    if (Engine.teleporter.active = true) {
+        if (
+            player.x < teleporter.x + 32 &&
+            player.x + player.w > teleporter.x &&
+            player.y < teleporter.y + 32 &&
+            player.y + player.h > teleporter.y
+        ) {
+            window.location.href = 'https://developer.mozilla.org/en-US/docs/Web/API/Location'
+        }
+    }
+
     requestAnimationFrame(loop);
 }
 

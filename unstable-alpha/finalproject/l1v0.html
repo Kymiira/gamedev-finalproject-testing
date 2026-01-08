@@ -12,10 +12,7 @@
     <div id="world">
       <div id="player"></div>
       <div id="bullet" class="bullet" style="display:none;"></div>
-      <div class="mark" style="left: 50px; top: 50px;"></div>
-      <div class="mark" style="left: 2800px; top: 50px;"></div>
-      <div class="mark" style="left: 50px; top: 2800px;"></div>
-      <div class="mark" style="left: 2800px; top: 2800px;"></div>
+      <div id="teleporter" style="display:none;"></div>
     </div>
 
     <div id="hud">
@@ -25,14 +22,18 @@
         <span id="hudPlayerX"></span>
         <span id="hudPlayerY"></span>
       </div>
-      <div id="helpersGroup">
-        <span>WASD to move</span><br>
-      </div>
       <div id="statsGroup">
         <div id="hudScore">Score: 0</div>
         <div id="healthContainer">
           <div id="healthBar"></div>
         </div>
+      </div>
+      <div id="informationGroup">
+        <span>WASD to move</span>
+        <span>left click to shoot</span>
+        <span>each hostile += 1 to score</span>
+        <span>reach 10 score to move on</span>
+        <span id="statusMessage"></span>
       </div>
       
 

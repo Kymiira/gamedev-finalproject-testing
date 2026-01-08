@@ -21,6 +21,55 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   will-change: transform;
   z-index: 1;
 }
+  /* teleporter */
+#teleporter {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--portal-color), #0088ff);
+  border-radius: 6px;
+  z-index: 2;
+  box-shadow: 0 0 15px var(--portal-glow);
+  top: 1500;
+  left: 1500;
+  transform: translate(-50%, -50%);  
+  animation: pulse 2s infinite ease-in-out;
+  cursor: pointer;
+  transition: transform 0.2s;
+  }
+
+#teleporter:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  filter: brightness(1.2);
+}
+#teleporter::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid var(--portal-color);
+  border-radius: 8px;
+  opacity: 0.5;
+  animation: ring 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    box-shadow: 0 0 15px var(--portal-glow);
+    filter: hue-rotate(0deg);
+  }
+  50% { 
+    box-shadow: 0 0 30px var(--portal-glow);
+    filter: hue-rotate(20deg);
+  }
+}
+
+@keyframes ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
 
 /* --- Entities --- */
 #player {
@@ -103,4 +152,11 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   height: 100%;
   background: linear-gradient(to right, #2ecc71, #27ae60);
   transition: width 0.3s ease-out;
+}
+
+#statusMessage {
+  position: absolute;
+  top: 20%;
+  right: 50%;
+  color: #067ee7cb;
 }
