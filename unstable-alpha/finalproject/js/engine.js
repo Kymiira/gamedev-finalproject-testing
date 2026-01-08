@@ -28,18 +28,22 @@ export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
 const healthBar  = document.getElementById('healthBar');
-const MAX_HEALTH = 100;
+const MAX_HEALTH = 10;
 
 // Healthbar
 export function updatePlayerHealth(amount) {
-    player.health = Math.max(0, player.health + amount);
+    player.health = Math.min(MAX_HEALTH, Math.max(0, player.health + amount));
     const healthPercentage = (player.health / MAX_HEALTH) * 100;
+
     if (healthBar) {
         healthBar.style.width = `${healthPercentage}%`;
+
+        healthBar.style.background = "#00ff00"; // Green
+
         if (healthPercentage < 30) {
-            healthBar.style.background = "#ff0000";
+            healthBar.style.background = "#ff0000"; // Red
         } else if (healthPercentage < 60) {
-            healthBar.style.background = "#ffff00";
+            healthBar.style.background = "#ffff00"; // Yellow
         }
     }
 }
@@ -154,7 +158,8 @@ export function checkCollisions(dt) {
                 player.y < h.y + 32 &&
                 player.y + player.h > h.y
             ) {
-                player.health -= 1;
+                updatePlayerHealth(-10);
+
                 playerInvincibility = 0.5;
                 
                 playerEl.style.filter = "brightness(3)";
