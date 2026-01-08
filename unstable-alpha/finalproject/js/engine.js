@@ -9,7 +9,7 @@ export const world = document.getElementById("world");
 export const playerEl = document.getElementById("player");
 export const bulletTemplate = document.getElementById("bullet");
 export const statusMessage = document.getElementById("statusMessage");
-export const teleporter document.getElementById('teleporter');
+export const teleporterEl = document.getElementById("teleporter");
 
 // Game Constants
 export const WORLD_W = 3000;
@@ -31,7 +31,7 @@ export let fireCd = 0;
 export const fire_cooldown = 0.12;
 export const healthBar  = document.getElementById('healthBar');
 export const MAX_HEALTH = 100;
-export const hostileSpawning = true;
+export let hostileSpawning = true;
 export const teleporter = { x: 1500, y: 1500, w: 32, h: 32, active: false };
 
 // Healthbar
@@ -97,7 +97,6 @@ export function resetFireCd() { fireCd = fire_cooldown; }
 // Logic: Hostiles
 export function updateHostiles(dt) {
   spawnTimer += dt;
-
   while (spawnTimer >= SPAWN_RATE && hostileSpawning === true) {
     spawnHostile();
     spawnTimer -= SPAWN_RATE;
@@ -195,20 +194,11 @@ export function checkCollisions(dt) {
                 break; 
             }
         }
-
-        if (
-            player.x < teleporter. + 32 &&
-            player.x + player.w > teleporter. &&
-            player.y < teleporter. + 32 &&
-            player.y + player.h > teleporter.
-        ) {
-            location.href('https://developer.mozilla.org/en-US/docs/Web/API/Location');
-        }
     }
 }
 
 // Score
-export export let score = 0;
+export let score = 0;
 export const hudScore = document.getElementById('hudScore');
 
 export function updateScore(amount) {
