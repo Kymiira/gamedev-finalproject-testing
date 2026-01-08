@@ -34,7 +34,6 @@ const MAX_HEALTH = 100;
 export function updatePlayerHealth(amount) {
     player.health = Math.min(MAX_HEALTH, Math.max(0, player.health + amount));
     const healthPercentage = (player.health / MAX_HEALTH) * 100;
-    console.log('healthPercentage') // debug
 
     if (healthBar) {
         healthBar.style.width = `${healthPercentage}%`;
@@ -93,53 +92,47 @@ export function resetFireCd() { fireCd = fire_cooldown; }
 
 // Logic: Hostiles
 export function updateHostiles(dt) {
-    spawnTimer += dt;
+  spawnTimer += dt;
 
-    if (spawnTimer >= SPAWN_RATE) {
-        spawnHostile();
-        spawnTimer = 0;
-    }
+  while (spawnTimer >= SPAWN_RATE) {
+    spawnHostile();
+    spawnTimer -= SPAWN_RATE;
+  }
 
-    for (let i = 0; i < hostiles.length; i++) {
-        const h = hostiles[i];
-
-        const dx = player.x - h.x;
-        const dy = player.y - h.y;
-
-        const dir = normalize(dx, dy);
-
-        const enemySpeed = 150
-        h.x += dir.x * enemySpeed * dt;
-        h.y += dir.y * enemySpeed * dt;
-
-        h.el.style.left = `${h.x}px`;
-        h.el.style.top = `${h.y}px`;
-    }
+  for (let i = 0; i < hostiles.length; i++) {
+    const h = hostiles[i];
+    const dir = normalize(player.x - h.x, player.y - h.y);
+    const enemySpeed = 150;
+    h.x += dir.x * enemySpeed * dt;
+    h.y += dir.y * enemySpeed * dt;
+    h.el.style.left = `${h.x}px`;
+    h.el.style.top = `${h.y}px`;
+  }
 }
 
 export function spawnHostile() {
-    const x = getRandomMath(WORLD_W - 32);
-    const y = getRandomMath(WORLD_H - 32);
-    let health = 5
+  const ENEMY_SIZE = 32;
 
-    const el = document.createElement("div");
-    el.classList.add("hostile")
-    el.style.position = "absolute";
-    el.style.width = "32px";
-    el.style.height = "32px";
-    el.style.background = "#e90909";
-    el.style.borderRadius = "6px";
-    el.style.zIndex = "5";
+  const MIN_R = 250;
+  const MAX_R = 650;
 
+  const t = Math.random();
+  const r = Math.sqrt((MIN_R * MIN_R) + t * (MAX_R * MAX_R - MIN_R * MIN_R));
+  const a = Math.random() * Math.PI * 2;
 
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
+  let x = player.x + Math.cos(a) * r;
+  let y = player.y + Math.sin(a) * r;
 
+  x = clamp(x, 0, WORLD_W - ENEMY_SIZE);
+  y = clamp(y, 0, WORLD_H - ENEMY_SIZE);
 
-    world.appendChild(el);
+  const el = document.createElement("div");
+  el.classList.add("hostile");
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  world.appendChild(el);
 
-    hostiles.push({x, y, el, health });
-    console.log(`hostile @ ${x}, ${y}`)
+  hostiles.push({ x, y, el, health: 5 });
 }
 
 // Logic: Collisions
