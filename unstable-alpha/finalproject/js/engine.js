@@ -122,7 +122,6 @@ export function spawnHostile() {
 }
 
 // Logic: Collisions
-// engine.js state variables
 let playerInvincibility = 0; 
 
 export function checkCollisions(dt) {
@@ -139,7 +138,7 @@ export function checkCollisions(dt) {
                 player.y < h.y + 32 &&
                 player.y + player.h > h.y
             ) {
-                player.health -= 10;
+                player.health -= 1;
                 playerInvincibility = 0.5;
                 
                 playerEl.style.filter = "brightness(3)";
@@ -163,7 +162,10 @@ export function checkCollisions(dt) {
                 b.y + b.h > h.y
             ) {
                 h.health -= 1;
-                
+                h.el.style.backgroundColor = "white";
+                setTimeout(() => {
+                    if (h.el) h.el.style.backgroundColor = "#e90909";
+                }, 50);
                 b.el.remove();
                 bullets.splice(i, 1);
 
@@ -180,4 +182,13 @@ export function checkCollisions(dt) {
 }
 
 // Score
-export
+export let score = 0;
+const hudScore = document.getElementById('hudScore');
+
+export function updateScore(amount) {
+    score += amount;
+
+    if (hudScore) {
+        hudScore.innerText = `Score: ${score}`;
+    }
+}
