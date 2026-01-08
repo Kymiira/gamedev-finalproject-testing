@@ -132,7 +132,7 @@ export function spawnHostile() {
   el.style.top = `${y}px`;
   world.appendChild(el);
 
-  hostiles.push({ x, y, el, health: 5 });
+  hostiles.push({ x, y, el, health: 10 });
 }
 
 // Logic: Collisions
