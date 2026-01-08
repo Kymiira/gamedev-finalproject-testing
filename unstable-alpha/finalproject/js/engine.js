@@ -28,7 +28,7 @@ export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
 const healthBar  = document.getElementById('healthBar');
-const MAX_HEALTH = 10;
+const MAX_HEALTH = 100;
 
 // Healthbar
 export function updatePlayerHealth(amount) {
