@@ -16,7 +16,7 @@ const bullet_speed = 900;
 const bullet_ttl = 1.2;
 
 // State
-export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280, health: 10 };
+export const player = { x: 1500, y: 1500, w: 32, h: 32, speed: 280, health: 100 };
 export const bullets = [];
 export const hostiles = [];
 let spawnTimer = 0;
@@ -28,7 +28,7 @@ export let faceRad = 0;
 export let fireCd = 0;
 export const fire_cooldown = 0.12;
 const healthBar  = document.getElementById('healthBar');
-const MAX_HEALTH = 10;
+const MAX_HEALTH = 100;
 
 // Healthbar
 export function updatePlayerHealth(amount) {
@@ -159,7 +159,7 @@ export function checkCollisions(dt) {
                 player.y < h.y + 32 &&
                 player.y + player.h > h.y
             ) {
-                updatePlayerHealth(-1);
+                updatePlayerHealth(-10);
 
                 playerInvincibility = 0.5;
                 
