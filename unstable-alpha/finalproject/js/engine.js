@@ -34,6 +34,7 @@ const MAX_HEALTH = 10;
 export function updatePlayerHealth(amount) {
     player.health = Math.min(MAX_HEALTH, Math.max(0, player.health + amount));
     const healthPercentage = (player.health / MAX_HEALTH) * 100;
+    console.log('healthPercentage') // debug
 
     if (healthBar) {
         healthBar.style.width = `${healthPercentage}%`;
