@@ -151,27 +151,27 @@ export function checkCollisions(dt) {
     for (let j = hostiles.length - 1; j >= 0; j--) {
         const h = hostiles[j];
 
-        // --- SECTION A: PLAYER VS HOSTILE ---
-        if (playerInvincibility <= 0) {
-            if (
-                player.x < h.x + 32 &&
-                player.x + player.w > h.x &&
-                player.y < h.y + 32 &&
-                player.y + player.h > h.y
-            ) {
-                updatePlayerHealth(-10);
-
-                playerInvincibility = 0.5;
-                
-                playerEl.style.filter = "brightness(3)";
-                setTimeout(() => playerEl.style.filter = "none", 100);
-                
-                if (player.health <= 0) {
-                    alert("Game Over!");
-                    window.location.reload();
-                }
-            }
+// --- SECTION A: PLAYER VS HOSTILE ---
+if (playerInvincibility <= 0) {
+    if (
+        player.x < h.x + 32 &&
+        player.x + player.w > h.x &&
+        player.y < h.y + 32 &&
+        player.y + player.h > h.y
+    ) {
+        playerInvincibility = 0.5; 
+        
+        updatePlayerHealth(-10); 
+        
+        playerEl.style.filter = "brightness(3)";
+        setTimeout(() => playerEl.style.filter = "none", 100);
+        
+        if (player.health <= 0) {
+            alert("Game Over!");
+            window.location.reload();
         }
+    }
+}
 
         // --- SECTION B: BULLETS VS THIS HOSTILE ---
         for (let i = bullets.length - 1; i >= 0; i--) {
