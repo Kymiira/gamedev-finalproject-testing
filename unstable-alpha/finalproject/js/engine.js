@@ -159,7 +159,7 @@ export function checkCollisions(dt) {
                 player.y < h.y + 32 &&
                 player.y + player.h > h.y
             ) {
-                updatePlayerHealth(-10);
+                updatePlayerHealth(-1);
 
                 playerInvincibility = 0.5;
                 
