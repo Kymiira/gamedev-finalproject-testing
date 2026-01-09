@@ -7,7 +7,7 @@ const fadeOverlay = document.getElementById('fadeOverlay');
 
 let transitioning = false;
 const TRANSITION_SECONDS = 5;
-const LEVEL2_URL = './l2v0.html';
+const LEVEL2_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 
 let last = 0;
 const hudPX = document.getElementById('hudPlayerX');
