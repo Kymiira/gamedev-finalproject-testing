@@ -1,5 +1,5 @@
 // utils.js
-export function normalize(x, y) {
+export function normalize(x, y) { // turns a vector into a length of 1, if no length, will push 0 
     const m = Math.hypot(x, y);
     if (m === 0) return { x: 0, y: 0 };
     return { x: x / m, y: y / m };
