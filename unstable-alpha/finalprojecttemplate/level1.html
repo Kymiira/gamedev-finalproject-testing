@@ -39,16 +39,7 @@ function loop() {
         shooting()
     }
 
-    function shooting() {
-        myShooting += 1
-        document.getElementById('myBullet').style.left = document.getElementById('myImg01').style.left
-        document.getElementById('myBullet').style.top  = document.getElementById('myImg01').style.top
-        clearInterval(myGun02)
-        myGun02 = setInterval(function(){
-            document.getElementById('myBullet').style.left = parseInt(document.getElementById('myBullet').style.left) + 10 + 'px'
-            myCheckHit() 
-        }, 20)   // speed of bullet faster lower number
-    }
+
     requestAnimationFrame(loop)
 }
 requestAnimationFrame(loop)
@@ -101,7 +92,16 @@ function myCheckHit(){
    // more if statements here
 
 }
-
+function shooting() {
+    myShooting += 1
+    document.getElementById('myBullet').style.left = document.getElementById('myImg01').style.left
+    document.getElementById('myBullet').style.top  = document.getElementById('myImg01').style.top
+    clearInterval(myGun02)
+    myGun02 = setInterval(function(){
+        document.getElementById('myBullet').style.left = parseInt(document.getElementById('myBullet').style.left) + 10 + 'px'
+        myCheckHit() 
+    }, 20)   // speed of bullet faster lower number
+}
 
 </script>
 
