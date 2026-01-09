@@ -57,16 +57,21 @@ function loop(ts) {
     hudMY.innerText = `MOUSE Y: ${Math.floor(myView)}`;
 
     // 7. LevelTP
-    if (Engine.teleporter.active = true) {
+    if (Engine.teleporter.active) {
+        const p = Engine.player;
+        const t = Engine.teleporter;
+        const left = t.x - t.w / 2;
+        const top  = t.y - t.h / 2;
+
         if (
-            player.x < teleporter.x + 32 &&
-            player.x + player.w > teleporter.x &&
-            player.y < teleporter.y + 32 &&
-            player.y + player.h > teleporter.y
+            p.x < left + t.w &&
+            p.x + p.w > left &&
+            p.y < top + t.h &&
+            p.y + p.h > top
         ) {
-            window.location.href = 'https://developer.mozilla.org/en-US/docs/Web/API/Location'
-        }
+        window.location.href = "https://developer.mozilla.org/en-US/docs/Web/API/Location";
     }
+}
 
     requestAnimationFrame(loop);
 }
