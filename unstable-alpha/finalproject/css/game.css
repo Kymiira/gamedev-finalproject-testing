@@ -13,6 +13,19 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   overflow: hidden;
   z-index: 0;
 }
+#fadeOverlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;                 /* world is 1, HUD is 100 */
+  transition: opacity 5s linear;
+}
+
+#fadeOverlay.active {
+  opacity: 1;
+}
 
 /* --- Game World --- */
 #world {
@@ -180,3 +193,5 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   text-align: center;
   line-height: 1.2;
 }
+
+
