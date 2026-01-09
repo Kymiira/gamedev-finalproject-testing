@@ -28,11 +28,7 @@ function myHitOther(my1,my2){
 }
 function loop() {
     console.log('myClock');
-    console.log('myGlobalX');
     console.log('myScore');
-    console.log('myGun01');
-    console.log('myGun02');
-    console.log('myShooting');
     if (myScore >= 20) {
         myScore = 10
     }
@@ -111,11 +107,11 @@ function myCheckHit(){
    }  
 
    if (event.key == 'w') {   // w = go up
-      document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) + -10 + 'px'
+      document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) - 10 + 'px'
    } 
 
    if (event.key == 'a') {   // a = go left
-      document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.top) + -10 + 'px'
+      document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.top) - 10 + 'px'
    } 
   myCheckHit()     // checks for all collisions
 }">
