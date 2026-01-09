@@ -38,12 +38,7 @@ function loop() {
     if (myClicking == true) {
         shooting()
     }
-    if (isBulletMoving == true) {
-        myGun02 = setInterval(function(){
-            document.getElementById('myBullet').style.left = parseInt(document.getElementById('myBullet').style.left) + 10 + 'px'
-            myCheckHit() 
-        }, 10)   // speed of bullet faster lower number
-    }
+    
 
 
     requestAnimationFrame(loop)
@@ -105,7 +100,12 @@ function shooting() {
     isBulletMoving = true
 
 }
-
+if (isBulletMoving == true) {
+        myGun02 = setInterval(function(){
+            document.getElementById('myBullet').style.left = parseInt(document.getElementById('myBullet').style.left) + 10 + 'px'
+            myCheckHit() 
+        }, 10)   // speed of bullet faster lower number
+    }
 </script>
 
 
