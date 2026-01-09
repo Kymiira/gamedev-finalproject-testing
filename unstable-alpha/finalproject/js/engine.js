@@ -32,6 +32,9 @@ export const fire_cooldown = 0.12;
 export const healthBar  = document.getElementById('healthBar');
 export const MAX_HEALTH = 100;
 export let hostileSpawning = true;
+export function setHostileSpawning(val) {
+  hostileSpawning = !!val;
+}
 export const teleporter = { x: 1500, y: 1500, w: 32, h: 32, active: false };
 
 // Healthbar

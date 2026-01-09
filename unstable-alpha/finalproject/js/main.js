@@ -114,7 +114,7 @@ function startLevelTransition() {
 
   if (fadeOverlay) fadeOverlay.classList.add('active');
 
-  Engine.hostileSpawning = false;
+  Engine.setHostileSpawning(false);
 
   if (Engine.teleporterEl) Engine.teleporterEl.style.display = 'none';
 
