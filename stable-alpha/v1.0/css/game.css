@@ -1,0 +1,197 @@
+/* --- Base Layout --- */
+html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
+
+:root {
+  --portal-color: #00c8ff;
+  --portal-glow: rgba(0, 200, 255, 0.8);
+}
+
+#viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+#fadeOverlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;                 /* world is 1, HUD is 100 */
+  transition: opacity 5s linear;
+}
+
+#fadeOverlay.active {
+  opacity: 1;
+}
+
+/* --- Game World --- */
+#world {
+  position: absolute;
+  width: 3000px;
+  height: 3000px;
+  background: 
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  will-change: transform;
+  z-index: 1;
+}
+  /* teleporter */
+#teleporter {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--portal-color), #0088ff);
+  border-radius: 6px;
+  z-index: 9;
+  box-shadow: 0 0 15px var(--portal-glow);
+  display: none;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite ease-in-out;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#teleporter:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  filter: brightness(1.2);
+}
+#teleporter::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid var(--portal-color);
+  border-radius: 8px;
+  opacity: 0.5;
+  animation: ring 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    box-shadow: 0 0 15px var(--portal-glow);
+    filter: hue-rotate(0deg);
+  }
+  50% { 
+    box-shadow: 0 0 30px var(--portal-glow);
+    filter: hue-rotate(20deg);
+  }
+}
+
+@keyframes ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* --- Entities --- */
+#player {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #076c94;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.hostile {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #e90909;
+  border-radius: 6px;
+  z-index: 5;
+}
+
+.bullet {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 15;
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+
+/* --- UI (z-Index: 100) --- */
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 0;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  z-index: 100;
+}
+
+#positionsGroup {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#statsGroup {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+#healthContainer {
+  width: 200px;
+  height: 12px;
+  background: #333;
+  border: 2px solid #555;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: inset 0 0 5px #000;
+}
+
+#healthBar {
+  width: 100%;
+  height: 100%;
+  transition: width 0.3s ease-out;
+}
+
+#informationGroup {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#statusMessage {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  transform: translateX(-50%);
+
+  pointer-events: none;
+
+  color: #067ee7cb;
+  text-shadow: #1d8bac 1px 0 10px;
+
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10px 14px;
+  border-radius: 6px;
+
+  max-width: min(720px, 90vw);
+  text-align: center;
+  line-height: 1.2;
+}
+
+
