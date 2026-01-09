@@ -188,7 +188,7 @@ export function checkCollisions(dt) {
                 if (h.health <= 0) {
                     h.el.remove();
                     hostiles.splice(j, 1);
-                    updateScore(100);
+                    updateScore(1);
                 }
                 
                 break; 
@@ -211,9 +211,17 @@ export function updateScore(amount) {
     } else {
         hostileSpawning = false;
         teleporter.active = true;
-        teleporterEl.style.left = teleporter.x + 'px';
-        teleporterEl.style.top = teleporter.y + 'px';
-        statusMessage.innerText = 'Get to the teleporter at the center of the map!'
+
+        if (teleporterEl) {
+            teleporterEl.style.display = 'block';
+            teleporterEl.style.left = `${teleporter.x}px`;
+            teleporterEl.style.top = `${teleporter.y}px`;
+        }
+
+        if (statusMessage) {
+            statusMessage.innerText = 'Get to the teleporter at the center of the map!'
+        }
+        
     }
 }
 

@@ -1,6 +1,11 @@
 /* --- Base Layout --- */
 html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
 
+:root {
+  --portal-color: #00c8ff;
+  --portal-glow: rgba(0, 200, 255, 0.8);
+}
+
 #viewport {
   position: relative;
   width: 100vw;
@@ -28,15 +33,14 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   height: 32px;
   background: linear-gradient(135deg, var(--portal-color), #0088ff);
   border-radius: 6px;
-  z-index: 2;
+  z-index: 9;
   box-shadow: 0 0 15px var(--portal-glow);
-  top: 1500;
-  left: 1500;
-  transform: translate(-50%, -50%);  
+  display: none;
+  transform: translate(-50%, -50%);
   animation: pulse 2s infinite ease-in-out;
   cursor: pointer;
   transition: transform 0.2s;
-  }
+}
 
 #teleporter:hover {
   transform: translate(-50%, -50%) scale(1.1);
@@ -156,7 +160,9 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
 
 #statusMessage {
   position: absolute;
-  top: 20%;
-  right: 50%;
+  top: 75%;
+  right: 39.25%;
   color: #067ee7cb;
+  text-shadow: #1d8bac 1px 0 10px;
+  border-radius: 2px;
 }
