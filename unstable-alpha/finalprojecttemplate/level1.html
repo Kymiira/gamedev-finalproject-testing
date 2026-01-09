@@ -6,7 +6,6 @@
     let myClock
     let myScore = 10
     let myGun02
-    let myShooting = false
     let myClicking = false
 
    // global functions here
@@ -93,14 +92,13 @@ function myCheckHit(){
 
 }
 function shooting() {
-    myShooting += 1
     document.getElementById('myBullet').style.left = document.getElementById('myImg01').style.left
     document.getElementById('myBullet').style.top  = document.getElementById('myImg01').style.top
     clearInterval(myGun02)
     myGun02 = setInterval(function(){
         document.getElementById('myBullet').style.left = parseInt(document.getElementById('myBullet').style.left) + 10 + 'px'
         myCheckHit() 
-    }, 20)   // speed of bullet faster lower number
+    }, 10)   // speed of bullet faster lower number
 }
 
 </script>
