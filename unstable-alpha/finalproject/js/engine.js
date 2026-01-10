@@ -9,7 +9,6 @@ export const world = document.getElementById("world");
 export const playerEl = document.getElementById("player");
 export const bulletTemplate = document.getElementById("bullet");
 export const statusMessage = document.getElementById("statusMessage");
-export const teleporterEl = document.getElementById("teleporter");
 
 // Game Constants
 export const WORLD_W = 3000;
@@ -35,7 +34,6 @@ export let hostileSpawning = true;
 export function setHostileSpawning(val) {
   hostileSpawning = !!val;
 }
-export const teleporter = { x: 1500, y: 1500, w: 32, h: 32, active: false };
 
 // Healthbar
 export function updatePlayerHealth(amount) {
@@ -142,7 +140,7 @@ export function spawnHostile() {
 }
 
 // Logic: Collisions
-export let playerInvincibility = 0; 
+export let playerInvincibility = 0;
 
 export function checkCollisions(dt) {
     if (playerInvincibility > 0) playerInvincibility -= dt;
@@ -211,20 +209,6 @@ export function updateScore(amount) {
         if (hudScore) {
             hudScore.innerText = `Score: ${score}`;
         }  
-    } else {
-        hostileSpawning = false;
-        teleporter.active = true;
-
-        if (teleporterEl) {
-            teleporterEl.style.display = 'block';
-            teleporterEl.style.left = `${teleporter.x}px`;
-            teleporterEl.style.top = `${teleporter.y}px`;
-        }
-
-        if (statusMessage) {
-            statusMessage.innerText = 'Get to the teleporter at the center of the map!'
-        }
-        
     }
+    // add if statements later on for random content such as RNG items, etc.
 }
-
