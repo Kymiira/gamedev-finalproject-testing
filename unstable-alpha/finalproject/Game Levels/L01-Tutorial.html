@@ -1,5 +1,30 @@
 <head>
     <style>
+
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #myBody {
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        #myText01{
+            width: min(98vw, 1600px);
+            box-sizing: border-box;
+        }
+
+        #hostiles, #bullets {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
         .sprite{
             position:absolute;
             background-size: 100% 100%;
@@ -54,9 +79,9 @@
         };
 
         const ASSETS = {
-            backgroundUrl: "https://opengameart.org/sites/default/files/styles/medium/public/backgrounddetailed1.png.preview.jpg",
-            playerUrl: "https://opengameart.org/sites/default/files/styles/medium/public/survivor-idle_shotgun_0.png",
-            bulletUrl: "https://pngtree.com/freepng/bullet-9mm_8132162.html"
+            backgroundUrl: "https://t4.ftcdn.net/jpg/02/54/37/49/240_F_254374948_TKsHGhSBDrXDedCAE6yF0bsuUkK0zL2J.jpg",
+            playerUrl: "",
+            bulletUrl: ""
         };
 
         // =========================
@@ -156,21 +181,28 @@
         // INPUT HANDLERS
         // =========================
         function onKeyDown(event) {
-            if (['w', 'a', 's', 'd'].includes(event.key)) event.preventDefault();
+            const t = event.target;
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'BUTTON')) return;
+
             if (!dom.player) return;
 
+            const code = event.code;
             const step = CFG.MOVE_STEP;
+
             const left = pxToNum(dom.player.style.left);
             const top = pxToNum(dom.player.style.top);
 
-            if (event.key === 'd') setLeft(dom.player, left + step);
-            if (event.key === 'a') setLeft(dom.player, left - step);
-            if (event.key === 's') setTop(dom.player, top + step);
-            if (event.key === 'w') setTop(dom.player, top - step);
+            if (code === 'KeyW' || code === 'ArrowUp') { setTop(dom.player, top - step); }
+            else if (code === 'KeyS' || code === 'ArrowDown') { setTop(dom.player, top + step); }
+            else if (code === 'KeyA' || code === 'ArrowLeft') { setLeft(dom.player, left - step); }
+            else if (code === 'KeyD' || code === 'ArrowRight') { setLeft(dom.player, left + step); }
         }
 
         function onClick(e) {
             if (dom.body) dom.body.focus();
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
 
             const tag = e.target && e.target.tagName;
             if (tag === 'INPUT' || tag === 'BUTTON') return;
@@ -389,7 +421,8 @@
                 if (hit(dom.player, h)) {
                     setLeft(dom.player, 20);
                     setTop(dom.player, 190);
-                    setHud('Hit! Reset position.');
+                    setHud('Hit! Reloading...');
+                    window.reload();
                     break;
                 }
             }
@@ -429,8 +462,8 @@
 
 </head>
 <body id="myBody" tabindex="0" style="background-repeat:repeat; background-size: 80%">
-    <span style="background-color: white;">(Left click to shoot, WASD to move).</span>
-    <input id="myText01" type=text value="" size=267 placeholder=""><br>
+    <span style="background-color: white;">(Left click to shoot, WASD to move) (Get hit and the Window Reloads) (Complete the Combat Goal to move on).</span>
+    <input id="myText01" type="text" value="" placeholder="" readonly tabindex="-1">
     <div id="player" class="sprite player" style="left:10px; top:190px;"></div>
     <div id="hostiles"></div>
     <div id="bullets"></div>
