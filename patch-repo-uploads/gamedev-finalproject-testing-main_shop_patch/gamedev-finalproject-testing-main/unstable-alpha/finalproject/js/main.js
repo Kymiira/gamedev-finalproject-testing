@@ -202,6 +202,7 @@ function loop(ts) {
 
   if (shopOpen) renderShop();
   requestAnimationFrame(loop);
+  }
 }
 // Shooting Listener
 Engine.viewport.addEventListener("pointerdown", (e) => {
