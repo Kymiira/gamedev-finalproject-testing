@@ -1,0 +1,470 @@
+<head>
+    <style>
+
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #myBody {
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        #myText01{
+            width: min(98vw, 1600px);
+            box-sizing: border-box;
+        }
+
+        #hostiles, #bullets {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .sprite{
+            position:absolute;
+            background-size: 100% 100%;
+            background-repeat:no-repeat;
+        }
+
+        .player {
+            position: absolute;
+            width: 42px;
+            height: 42px;
+            background: #076c94;
+            border-radius: 6px;
+        }
+
+        .hostile{
+            position:absolute;
+            width:42px;
+            height:42px;
+            background: #e90909;
+            border-radius: 6px;
+        }
+
+        .bullet{
+            position:absolute;
+            width:4px;
+            height:6px;
+            border-radius: 6px;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+            pointer-events:none;
+        } 
+    </style>
+
+    <script>
+    (() => {
+        'use strict';
+
+        window.addEventListener('DOMContentLoaded', init);
+
+        // =========================
+        // CONFIG / ASSETS
+        // =========================
+        const CFG = {
+            MAX_HOSTILES: 100,
+            SPAWN_MS: 100,
+            HOSTILE_SPEED: 0.4,     // px per frame
+            BULLET_SPEED: 12,       // px per frame
+            WIN_KILLS: 25,
+            MOVE_STEP: 10,          // px per keydown
+            BG_SCROLL_STEP: 5,
+            BG_SCROLL_MS: 100
+        };
+
+        const ASSETS = {
+            backgroundUrl: "https://t4.ftcdn.net/jpg/02/54/37/49/240_F_254374948_TKsHGhSBDrXDedCAE6yF0bsuUkK0zL2J.jpg",
+            playerUrl: "",
+            bulletUrl: ""
+        };
+
+        // =========================
+        // STATE
+        // =========================
+        const state = {
+            combatStarted: false,
+            phaseC: false,
+            kills: 0,
+            hostileCounter: 0,
+            hostileSpawnTimer: null,
+            bgScrollTimer: null,
+            bgX: 0,
+            bullets: []             // { el, vx, vy }
+        };
+
+        // =========================
+        // DOM REFS
+        // =========================
+        const dom = {
+            body: null,
+            player: null,
+            hud: null,
+            hostilesContainer: null,
+            bulletsContainer: null
+        };
+
+        // =========================
+        // DOM / GEOMETRY HELPERS
+        // =========================
+        function pxToNum(v) {
+            return parseFloat(v) || 0;
+        }
+
+        function setLeft(el, x) {
+            el.style.left = `${x}px`;
+        }
+
+        function setTop(el, y) {
+            el.style.top = `${y}px`;
+        }
+
+        function getRect(el) {
+            const left = pxToNum(el.style.left);
+            const top = pxToNum(el.style.top);
+            const w = parseFloat(el.style.width) || el.offsetWidth;
+            const h = parseFloat(el.style.height) || el.offsetHeight;
+            return { left, top, right: left + w, bottom: top + h, w, h };
+        }
+
+        function hit(a, b) {
+            const A = getRect(a);
+            const B = getRect(b);
+            return (
+                A.right >= B.left &&
+                A.bottom >= B.top &&
+                A.left <= B.right &&
+                A.top <= B.bottom
+            );
+        }
+
+        function getHostiles() {
+            return document.querySelectorAll('.hostile');
+        }
+
+        // =========================
+        // INIT / WIRING
+        // =========================
+        function init() {
+            dom.body = document.getElementById('myBody');
+            dom.player = document.getElementById('player');
+            dom.hud = document.getElementById('myText01');
+
+            dom.hostilesContainer = document.getElementById('hostiles') || document.body;
+            dom.bulletsContainer = document.getElementById('bullets') || document.body;
+
+            if (dom.body) {
+                dom.body.style.backgroundImage = `url(${ASSETS.backgroundUrl})`;
+                if (dom.body.tabIndex < 0) dom.body.tabIndex = 0;
+                dom.body.focus();
+            }
+
+            if (dom.player && ASSETS.playerUrl) {
+                dom.player.style.backgroundImage = `url(${ASSETS.playerUrl})`;
+            }
+
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('click', onClick);
+
+            startBackgroundScroll();
+
+            setHud(`Click to start combat: 0/${CFG.WIN_KILLS}`);
+            requestAnimationFrame(loop);
+        }
+
+        // =========================
+        // INPUT HANDLERS
+        // =========================
+        function onKeyDown(event) {
+            const t = event.target;
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'BUTTON')) return;
+
+            if (!dom.player) return;
+
+            const code = event.code;
+            const step = CFG.MOVE_STEP;
+
+            const left = pxToNum(dom.player.style.left);
+            const top = pxToNum(dom.player.style.top);
+
+            if (code === 'KeyW' || code === 'ArrowUp') { setTop(dom.player, top - step); }
+            else if (code === 'KeyS' || code === 'ArrowDown') { setTop(dom.player, top + step); }
+            else if (code === 'KeyA' || code === 'ArrowLeft') { setLeft(dom.player, left - step); }
+            else if (code === 'KeyD' || code === 'ArrowRight') { setLeft(dom.player, left + step); }
+        }
+
+        function onClick(e) {
+            if (dom.body) dom.body.focus();
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
+
+            const tag = e.target && e.target.tagName;
+            if (tag === 'INPUT' || tag === 'BUTTON') return;
+
+            if (state.phaseC) {
+                location.assign("https://kymiira.github.io/gamedev-finalproject-testing/unstable-alpha/finalproject/Game%20Levels/L02-Endless.html");
+                return;
+            }
+
+            if (!state.combatStarted) {
+                startCombat();
+                return;
+            }
+
+            spawnBullet(e);
+        }
+
+        // =========================
+        // HUD
+        // =========================
+        function setHud(msg) {
+            if (dom.hud) dom.hud.value = msg;
+        }
+
+        // =========================
+        // COMBAT FLOW
+        // =========================
+        function startCombat() {
+            state.combatStarted = true;
+            state.phaseC = false;
+            state.kills = 0;
+
+            startHostileSpawns();
+            setHud(`Combat started: ${state.kills}/${CFG.WIN_KILLS}`);
+        }
+
+        function winCombat() {
+            if (state.phaseC) return;
+
+            stopHostileSpawns();
+
+            state.phaseC = true;
+            state.combatStarted = false;
+
+            for (const h of getHostiles()) h.remove();
+
+            for (let i = state.bullets.length - 1; i >= 0; i--) {
+                state.bullets[i].el.remove();
+                state.bullets.splice(i, 1);
+            }
+
+            setHud('Phase C unlocked. Click to continue.');
+        }
+
+        // =========================
+        // SPAWNING
+        // =========================
+        function startHostileSpawns() {
+            stopHostileSpawns();
+            state.hostileSpawnTimer = setInterval(spawnHostile, CFG.SPAWN_MS);
+        }
+
+        function stopHostileSpawns() {
+            if (state.hostileSpawnTimer) {
+                clearInterval(state.hostileSpawnTimer);
+                state.hostileSpawnTimer = null;
+            }
+        }
+
+        function spawnHostile() {
+            if (!state.combatStarted || state.phaseC) return;
+
+            const current = getHostiles();
+            if (current.length >= CFG.MAX_HOSTILES) return;
+
+            state.hostileCounter += 1;
+
+            const h = document.createElement('div');
+            h.className = 'sprite hostile';
+            h.id = `hostile_${state.hostileCounter}`;
+
+            h.style.width = '48px';
+            h.style.height = '48px';
+
+            const pad = 30;
+            const edge = Math.floor(Math.random() * 4);
+            let x, y;
+
+            if (edge === 0) {
+                x = -pad;
+                y = Math.random() * (window.innerHeight - 80);
+            } else if (edge === 1) {
+                x = window.innerWidth + pad;
+                y = Math.random() * (window.innerHeight - 80);
+            } else if (edge === 2) {
+                x = Math.random() * (window.innerWidth - 100);
+                y = -pad;
+            } else {
+                x = Math.random() * (window.innerWidth - 100);
+                y = window.innerHeight + pad;
+            }
+
+            setLeft(h, x);
+            setTop(h, y);
+
+            dom.hostilesContainer.appendChild(h);
+        }
+
+        // =========================
+        // BULLETS
+        // =========================
+        function spawnBullet(e) {
+            if (!dom.player) return;
+
+            const pRect = getRect(dom.player);
+            const startX = pRect.left + pRect.w / 2;
+            const startY = pRect.top + pRect.h / 2;
+
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            const dx = mouseX - startX;
+            const dy = mouseY - startY;
+            const len = Math.hypot(dx, dy) || 1;
+
+            const vx = (dx / len) * CFG.BULLET_SPEED;
+            const vy = (dy / len) * CFG.BULLET_SPEED;
+            const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+
+            const b = document.createElement('div');
+            b.className = 'bullet';
+            if (ASSETS.bulletUrl) b.style.backgroundImage = `url(${ASSETS.bulletUrl})`;
+
+            setLeft(b, startX - 5);
+            setTop(b, startY - 5);
+
+            b.style.transform = `rotate(${angleDeg}deg)`;
+            b.style.transformOrigin = '50% 50%';
+
+            dom.bulletsContainer.appendChild(b);
+            state.bullets.push({ el: b, vx, vy });
+        }
+
+        function updateBullets() {
+            for (let i = state.bullets.length - 1; i >= 0; i--) {
+                const bullet = state.bullets[i];
+                const el = bullet.el;
+
+                const x = pxToNum(el.style.left);
+                const y = pxToNum(el.style.top);
+
+                setLeft(el, x + bullet.vx);
+                setTop(el, y + bullet.vy);
+
+                const bx = pxToNum(el.style.left);
+                const by = pxToNum(el.style.top);
+
+                if (bx < -50 || bx > window.innerWidth + 50 || by < -50 || by > window.innerHeight + 50) {
+                    el.remove();
+                    state.bullets.splice(i, 1);
+                    continue;
+                }
+
+                for (const h of getHostiles()) {
+                    if (hit(el, h)) {
+                        el.remove();
+                        state.bullets.splice(i, 1);
+
+                        h.remove();
+
+                        state.kills += 1;
+                        setHud(`Kills: ${state.kills}/${CFG.WIN_KILLS}`);
+
+                        if (state.kills >= CFG.WIN_KILLS) {
+                            winCombat();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // =========================
+        // HOSTILE AI + PLAYER HIT
+        // =========================
+        function updateHostiles() {
+            if (!state.combatStarted || state.phaseC) return;
+            if (!dom.player) return;
+
+            const pRect = getRect(dom.player);
+            const px = pRect.left + pRect.w / 2;
+            const py = pRect.top + pRect.h / 2;
+
+            for (const h of getHostiles()) {
+                const r = getRect(h);
+                const hx = r.left + r.w / 2;
+                const hy = r.top + r.h / 2;
+
+                const dx = px - hx;
+                const dy = py - hy;
+                const len = Math.hypot(dx, dy) || 1;
+
+                const vx = (dx / len) * CFG.HOSTILE_SPEED;
+                const vy = (dy / len) * CFG.HOSTILE_SPEED;
+
+                setLeft(h, r.left + vx);
+                setTop(h, r.top + vy);
+            }
+        }
+
+        function checkPlayerHit() {
+            if (!state.combatStarted || state.phaseC) return;
+            if (!dom.player) return;
+
+            for (const h of getHostiles()) {
+                if (hit(dom.player, h)) {
+                    setLeft(dom.player, 20);
+                    setTop(dom.player, 190);
+                    setHud('Hit! Reloading...');
+                    window.reload();
+                    break;
+                }
+            }
+        }
+
+        // =========================
+        // MAIN LOOP
+        // =========================
+        function loop() {
+            if (state.combatStarted && !state.phaseC) {
+                updateHostiles();
+                updateBullets();
+                checkPlayerHit();
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // =========================
+        // BACKGROUND SCROLL
+        // =========================
+        function startBackgroundScroll() {
+            stopBackgroundScroll();
+            state.bgScrollTimer = setInterval(() => {
+                state.bgX -= CFG.BG_SCROLL_STEP;
+                if (dom.body) dom.body.style.backgroundPosition = `${state.bgX}px 0px`;
+            }, CFG.BG_SCROLL_MS);
+        }
+
+        function stopBackgroundScroll() {
+            if (state.bgScrollTimer) {
+                clearInterval(state.bgScrollTimer);
+                state.bgScrollTimer = null;
+            }
+        }
+    })();
+    </script>
+
+</head>
+<body id="myBody" tabindex="0" style="background-repeat:repeat; background-size: 80%">
+    <span style="background-color: white;">(Left click to shoot, WASD to move) (Get hit and the Window Reloads) (Complete the Combat Goal to move on).</span>
+    <input id="myText01" type="text" value="" placeholder="" readonly tabindex="-1">
+    <div id="player" class="sprite player" style="left:10px; top:190px;"></div>
+    <div id="hostiles"></div>
+    <div id="bullets"></div>
+</body>

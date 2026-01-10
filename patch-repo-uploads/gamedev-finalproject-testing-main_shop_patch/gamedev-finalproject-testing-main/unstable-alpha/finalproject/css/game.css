@@ -1,0 +1,225 @@
+/* --- Base Layout --- */
+html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
+
+#viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* --- Game World --- */
+#world {
+  position: absolute;
+  width: 3000px;
+  height: 3000px;
+  background: 
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  will-change: transform;
+  z-index: 1;
+}
+
+/* --- Entities --- */
+#player {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #076c94;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.hostile {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #e90909;
+  border-radius: 6px;
+  z-index: 5;
+}
+
+.bullet {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 15;
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+
+/* --- UI (z-Index: 100) --- */
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 0;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  z-index: 100;
+}
+
+#positionsGroup {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#statsGroup {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+#healthContainer {
+  width: 200px;
+  height: 12px;
+  background: #333;
+  border: 2px solid #555;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: inset 0 0 5px #000;
+}
+
+#healthBar {
+  width: 100%;
+  height: 100%;
+  transition: width 0.3s ease-out;
+}
+
+#informationGroup {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#statusMessage {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  transform: translateX(-50%);
+
+  pointer-events: none;
+
+  color: #067ee7cb;
+  text-shadow: #1d8bac 1px 0 10px;
+
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10px 14px;
+  border-radius: 6px;
+
+  max-width: min(720px, 90vw);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* --- SHOP OVERLAY --- */
+#shopOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  z-index: 90;           /* above world (1), below HUD (100) */
+  pointer-events: auto;
+}
+
+#shopOverlay.open {
+  display: block;
+}
+
+#shopPanel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 92vw);
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.7);
+}
+
+#shopHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+#shopTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#shopSub {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+#shopItems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shopItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 8px;
+}
+
+.shopItem .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shopItem .name {
+  font-weight: 700;
+}
+
+.shopItem .desc,
+.shopItem .cost {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.shopItem .cost {
+  white-space: nowrap;
+}
+
+.shopItem button {
+  pointer-events: auto;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.shopItem button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
