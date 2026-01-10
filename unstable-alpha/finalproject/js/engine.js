@@ -192,7 +192,7 @@ export function checkCollisions(dt) {
                 if (h.health <= 0) {
                     h.el.remove();
                     hostiles.splice(j, 1);
-                    updateScore(1);
+                    updateCoins(getRandomMath(25));
                 }
                 
                 break; 
@@ -201,14 +201,13 @@ export function checkCollisions(dt) {
     }
 }
 
-// Score
-export let score = 0;
-export const hudScore = document.getElementById('hudScore');
+// Coins
+export let coins = 0;
+export const hudCoins = document.getElementById('hudCoins');
 
-export function updateScore(amount) {
-    score += amount;
-    if (hudScore) {
-        hudScore.innerText = `Score: ${score}`;
+export function updateCoins(amount) {
+    coins += amount;
+    if (hudCoins) {
+        hudCoins.innerText = `Coins: ${coins}`;
     }  
-    // add if statements later on for random content such as RNG items, etc.
 }

@@ -1,30 +1,12 @@
 /* --- Base Layout --- */
 html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
 
-:root {
-  --portal-color: #00c8ff;
-  --portal-glow: rgba(0, 200, 255, 0.8);
-}
-
 #viewport {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   z-index: 0;
-}
-#fadeOverlay {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 50;                 /* world is 1, HUD is 100 */
-  transition: opacity 5s linear;
-}
-
-#fadeOverlay.active {
-  opacity: 1;
 }
 
 /* --- Game World --- */
@@ -38,54 +20,6 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
   background-size: 64px 64px;
   will-change: transform;
   z-index: 1;
-}
-  /* teleporter */
-#teleporter {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--portal-color), #0088ff);
-  border-radius: 6px;
-  z-index: 9;
-  box-shadow: 0 0 15px var(--portal-glow);
-  display: none;
-  transform: translate(-50%, -50%);
-  animation: pulse 2s infinite ease-in-out;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-#teleporter:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-  filter: brightness(1.2);
-}
-#teleporter::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border: 2px solid var(--portal-color);
-  border-radius: 8px;
-  opacity: 0.5;
-  animation: ring 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { 
-    box-shadow: 0 0 15px var(--portal-glow);
-    filter: hue-rotate(0deg);
-  }
-  50% { 
-    box-shadow: 0 0 30px var(--portal-glow);
-    filter: hue-rotate(20deg);
-  }
-}
-
-@keyframes ring {
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(1.5); opacity: 0; }
 }
 
 /* --- Entities --- */
