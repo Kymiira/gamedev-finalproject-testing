@@ -31,6 +31,8 @@ export const fire_cooldown = 0.12;
 export const healthBar  = document.getElementById('healthBar');
 export const MAX_HEALTH = 100;
 export let hostileSpawning = true;
+export let hostileHealth = 10;
+export let hostileDmg = -10;
 export function setHostileSpawning(val) {
   hostileSpawning = !!val;
 }
@@ -136,7 +138,7 @@ export function spawnHostile() {
   el.style.top = `${y}px`;
   world.appendChild(el);
 
-  hostiles.push({ x, y, el, health: 10 });
+  hostiles.push({ x, y, el, health: hostileHealth });
 }
 
 // Logic: Collisions
@@ -157,7 +159,8 @@ export function checkCollisions(dt) {
             ) {
                 playerInvincibility = 0.5; 
                 
-                updatePlayerHealth(-10); 
+                updatePlayerHealth(hostileDmg); 
+                h.health -= 1; // contact damage to both sides
                 
                 playerEl.style.filter = "brightness(3)";
                 setTimeout(() => playerEl.style.filter = "none", 100);
@@ -203,12 +206,9 @@ export let score = 0;
 export const hudScore = document.getElementById('hudScore');
 
 export function updateScore(amount) {
-    if (score < 10) {
-        score += amount;
-
-        if (hudScore) {
-            hudScore.innerText = `Score: ${score}`;
-        }  
-    }
+    score += amount;
+    if (hudScore) {
+        hudScore.innerText = `Score: ${score}`;
+    }  
     // add if statements later on for random content such as RNG items, etc.
 }
