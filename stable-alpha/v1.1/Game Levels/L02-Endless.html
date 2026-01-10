@@ -4,42 +4,39 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Movement + Camera Test</title>
-  <link rel="stylesheet" href="./css/game.css" />
+  <link rel="stylesheet" href="../css/game.css" />
 </head>
 
 <body>
   <div id="viewport">
     <div id="world">
       <div id="player"></div>
-      <div class="mark" style="left: 50px; top: 50px;"></div>
-      <div class="mark" style="left: 2800px; top: 50px;"></div>
-      <div class="mark" style="left: 50px; top: 2800px;"></div>
-      <div class="mark" style="left: 2800px; top: 2800px;"></div>
     </div>
-
     <div id="hud">
-      <div id="positionGroup">
+      <div id="positionsGroup">
         <span id="hudMouseX"></span>
         <span id="hudMouseY"></span>
         <span id="hudPlayerX"></span>
         <span id="hudPlayerY"></span>
       </div>
-      <div id="helpersGroup">
-        <span>WASD to move</span><br>
-      </div>
       <div id="statsGroup">
-        <div id="hudScore">Score: 0</div>
+        <div id="hudCoins">Coins: 0</div>
         <div id="healthContainer">
           <div id="healthBar"></div>
         </div>
       </div>
-      
+      <div id="informationGroup">
+        <span>WASD to move</span>
+        <span>left click to shoot</span>
+        <span>each hostile += 1 to score</span>
+      </div>
+      <div id="statusMessage"></div>
 
     </div>
   </div>
   
   
 </body>
-<script type="module" src="./js/main.js"></script>
+<script type="module" src="../js/main.js"></script>
 </html>
 

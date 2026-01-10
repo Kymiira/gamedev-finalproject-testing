@@ -9,7 +9,6 @@ export const world = document.getElementById("world");
 export const playerEl = document.getElementById("player");
 export const bulletTemplate = document.getElementById("bullet");
 export const statusMessage = document.getElementById("statusMessage");
-export const teleporterEl = document.getElementById("teleporter");
 
 // Game Constants
 export const WORLD_W = 3000;
@@ -32,10 +31,11 @@ export const fire_cooldown = 0.12;
 export const healthBar  = document.getElementById('healthBar');
 export const MAX_HEALTH = 100;
 export let hostileSpawning = true;
+export let hostileHealth = 10;
+export let hostileDmg = -10;
 export function setHostileSpawning(val) {
   hostileSpawning = !!val;
 }
-export const teleporter = { x: 1500, y: 1500, w: 32, h: 32, active: false };
 
 // Healthbar
 export function updatePlayerHealth(amount) {
@@ -138,11 +138,11 @@ export function spawnHostile() {
   el.style.top = `${y}px`;
   world.appendChild(el);
 
-  hostiles.push({ x, y, el, health: 10 });
+  hostiles.push({ x, y, el, health: hostileHealth });
 }
 
 // Logic: Collisions
-export let playerInvincibility = 0; 
+export let playerInvincibility = 0;
 
 export function checkCollisions(dt) {
     if (playerInvincibility > 0) playerInvincibility -= dt;
@@ -159,7 +159,8 @@ export function checkCollisions(dt) {
             ) {
                 playerInvincibility = 0.5; 
                 
-                updatePlayerHealth(-10); 
+                updatePlayerHealth(hostileDmg); 
+                h.health -= 1; // contact damage to both sides
                 
                 playerEl.style.filter = "brightness(3)";
                 setTimeout(() => playerEl.style.filter = "none", 100);
@@ -191,7 +192,7 @@ export function checkCollisions(dt) {
                 if (h.health <= 0) {
                     h.el.remove();
                     hostiles.splice(j, 1);
-                    updateScore(1);
+                    updateCoins(getRandomMath(25));
                 }
                 
                 break; 
@@ -200,31 +201,13 @@ export function checkCollisions(dt) {
     }
 }
 
-// Score
-export let score = 0;
-export const hudScore = document.getElementById('hudScore');
+// Coins
+export let coins = 0;
+export const hudCoins = document.getElementById('hudCoins');
 
-export function updateScore(amount) {
-    if (score < 10) {
-        score += amount;
-
-        if (hudScore) {
-            hudScore.innerText = `Score: ${score}`;
-        }  
-    } else {
-        hostileSpawning = false;
-        teleporter.active = true;
-
-        if (teleporterEl) {
-            teleporterEl.style.display = 'block';
-            teleporterEl.style.left = `${teleporter.x}px`;
-            teleporterEl.style.top = `${teleporter.y}px`;
-        }
-
-        if (statusMessage) {
-            statusMessage.innerText = 'Get to the teleporter at the center of the map!'
-        }
-        
-    }
+export function updateCoins(amount) {
+    coins += amount;
+    if (hudCoins) {
+        hudCoins.innerText = `Coins: ${coins}`;
+    }  
 }
-
